@@ -1,0 +1,121 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\lstset{language=Python, showstringspaces=false, basicstyle=\small,
+  numbers=left, numberstyle=\tiny, numberfirstline=false, breaklines=true,
+  stepnumber=1, tabsize=4, 
+  commentstyle=\ttfamily, identifierstyle=\ttfamily,
+  stringstyle=\itshape, }
+\title{Compression}
+\author{Luuk - s2260018 levi van Es - s2115409 }
+\date{October 2018}
+
+\begin{document}
+
+\maketitle
+
+\section{Code}
+
+    \subsection{Encoderen}
+       De encodeerfunctie itereert over elk character in "Text". Hierbij gaat het bij elke iteratie over de controle van een aantal condities. De eerste conditie word gecheckt door een if statement waarbij het huidige charakter word gecheckt of het een getal is.Wanneer deze een boolean van true teruggeeft wordt dit getal opgeteld bij de variable "getal". Wanneer het complete getal is opgesteld word het door de "bins" (numpy functie) functie omgezet naar een getal binnen een bepaald bereik waardoor het later makkelijk is om in de histogram te verwerken.
+       
+       
+       \begin{lstlisting}[frame=single, language=python]  % Start your code-block
+        
+        input encode(text)
+        
+       "Who knew little charlie could run that fast. He kept on running faster fasteer and fasteeeeeerr !"
+        
+        output encode(text) 
+        
+        "Who knew lit2le charlie could run that fast. He kept on run2ing faster faste2r and faste6r2 !"
+ 
+
+        \end{lstlisting}
+
+       
+       De volgende conditie kijkt of het huidige karakter hetzelfde is als de vorige karakter en op basis hiervan word er bepaald of het bij de accumulator "n" moet worden opgeteld. Is het karakter niet hetzelfde als het vorige karakter dan wordt het getal van de accumulator samen met het vorige karakter afgedrukt en begint de accumulator opnieuw.
+       \newline
+       
+       Op het laatste word er gekeken naar een speciale encode voorwaarde waarbij een aantal karakters op een speciale manier gedecodeerd moeten worden. Hierbij gaat het over de charakters "\\01234567890:". Deze karakters moeten gedecodeerd worden met een "\\" voor zich. Het doel hiervan is het herkennen van deze speciale getallen tijdens het decoderen en het voorkomen van ongewenste artifacten. Hierbij zou bijvoorbeeld een "/n" gezien kunnen worden door python als een line-break i.p.v een normaal stukje text. Deze manier van encoderen zorgt ervoor dat dit niet gebeurd.
+       
+       
+       \begin{lstlisting}[frame=single, language=python]  % Start your code-block
+            
+            input encode():
+                "2800 3400, 2900, 2000, 4000, 4378,  8000, 9000, 6000, 5689, 3478, 4085, 7095, 1010,1785, 3000,8090
+                : // \737:;/\]["
+    
+            output encode():
+                \2\8\02 \3\4\02, \2\9\02, \2\03, \4\03, \4\3\7\8, 2\8\03, \9\03, \6\03, \5\6\8\9, \3\4\7\8, \4\0\8\5, \7\0\9\5, \1\0\1\0,\1\7\8\5, \3\03,\8\0\9\0
+                : /2 \\\7\3\7:;/\\][
+        \end{lstlisting}
+       
+    \subsection{Decoderen}
+    
+        
+    
+    \subsection{Histogram}
+      De ontwikkeling van het histogram ging relatief rechtoe rechtaan aangezien we beide een duidelijk beeld hadden van de aanpak. Het eerste prototype was schetsend en zeer tijdrovend. Hoewel dit "schetsje" zeer overzichtelijk was was het ook heel onnodig groot gecodeerd. Dat was voor ons de reden om een compactere versie van het histogram te maken. De schets maakte gebruik van een systeem waarbij het historgram al vooraf ruimtelijk was getekend en geinitaliseerd moest worden met standaardwaarden. Na deze initiatie werden de correcte coordinaten in het histogram vervangen door sterretjes. 
+      \newpage
+      \begin{lstlisting}[frame=single, language=python]  % Start your code-block
+            
+            input encode():
+                "2800 3400, 2900, 2000, 4000, 4378,  8000, 9000, 6000, 5689, 3478, 4085, 7095, 1010,1785, 3000,8090
+                : // \737:;/\]["
+    
+            output encode():
+               Regels verwerkt: 2
+                3
+                 |    * * *          
+                 |    * * *          
+                 |    * * *          
+                 |  * * * *       *  
+                 |  * * * *       *  
+                 |  * * * *       *  
+                 |* * * * * * * * * *
+                 |* * * * * * * * * *
+                 |* * * * * * * * * *
+                 |* * * * * * * * * *
+                 +--------------------
+                1                    9999
+        \end{lstlisting}
+      
+      De uiteindelijke gecomprimeerde versie van de histogramfunctie maakt gebruik van een for-loop waarbij het tekenen en initialisatie van het programma in een loop verwerkt zitten. Dit stukje bespaart ons ongeveer 37 regels in het uiteindelijke product en is veel efficienter voor het werkgeheugen omdat het hierbij geen onnodige varabelen op moet slaan. 
+    
+    \subsection{Palindrome}
+         Palindroombepaling
+    
+    \subsection{Verhouding}
+        De verhouding word in ons programma berekend door eerst het invoerbestand lijn voor lijn om te zetten naar het UTF-8 formaat zodat wij zeker weten dat elk karakter dezelfde ruimte van 8 bits inneemt. Hierdoor neemt elk karakter dezelfde ruimte in waardoor het makkelijk is om mee te rekenen. Hierbij word er ook rekening gehouden met veel speciale karakters in unicode die bestaan uit meer dan 1 byte. De verhouding word gerekend door de  naar UTF-8 omgezette lijn voor het encoderen te delen door de naar UTF-8 omgezette lijn na het encoderen. Dit resulteerd in het compressieratio van de gecomprimeerde textfile. 
+        
+        \begin{lstlisting}[frame=single, language=python]  % Start your code-block
+        input():
+            "Who knew little charlie could run that fast. He kept on running faster fasteer and fasteeeeeerr !"
+            
+            
+        
+        
+        Output encode():    
+            
+            "Who knew lit2le charlie could run that fast. He kept on run2ing faster faste2r and faste6r2 !"
+                
+            Compressierate: 95%
+            Regels verwerkt: 1
+
+            
+        \end{lstlisting}
+
+\section{Tijdsverdeling}
+
+\begin{tabular}{ l | p{6cm} p{6cm} }
+   & Luuk & Levi \\
+  \hline
+  Week 1 & Encodeer gedeelte van de functie uitdenken en uitwereken en debuggen & Encodeergedeelte van de functie uitdenken en debuggen \\
+  Week 2 & Een begin maken aan Decodeerfunctie en ideen opdoen voor palindroomuitwerking & Ontwerpen en uitwerken van eerste Histogramcode prototype \\
+  Week 3 & -Ideeen opdoen voor verdere decodeeroptimalisatie en aanpassingen maken aan de decodeerfunctie om de code zo efficient en klein mogelijk te maken.\linebreak -Integratie van palindroomfunctie in de decodeerfunctie & -Verdere uitwerk van Histogramcode en gezamelijke Decoderen Debugging. \linebreak - Ontwikkeling uiteindelijk geimplementeerde versie van het histogram.  \linebreak  - Onderzoek naar python classes \\
+  Week 4  & Debuggen van speciale gevallen bij het en- en decoderen. Implementeren van het compressieratio & Debugging \\
+ 
+  
+\end{tabular}
+\end{document}
