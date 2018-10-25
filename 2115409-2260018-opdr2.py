@@ -2,7 +2,7 @@
 """opdracht 2 - DeCode
 Auteurs: Levi van Es  - 2115409
          Luuk de Jong - 2260018
-Datum van laatste bewerking: 2018-10-23
+Datum van laatste bewerking: 2018-10-25
 
 Het programma kan tekst volgens het principe van
 "Run-Length Encoding" coderen en decoderen en detecteert
@@ -15,9 +15,9 @@ INFOBLOKJE = \
 +-------------------------------------------------------------------+
 |Auteurs:                                                           |
 +- Naam: Levi van Es                                                |
-|  Studentnummer: 2115409                                                  |
-|  Jaar van aankomst: 2018                                              |
-|  Studierichting:                                                  |
+|  Studentnummer: 2115409                                           |
+|  Jaar van aankomst: 2018                                          |
+|  Studierichting: Natuurkunde                                      |
 |                                                                   |
 +- Naam: Luuk de Jong                                               |
 |  Studentnummer: 2260018                                           |
@@ -51,7 +51,8 @@ def encode(text):
         if char.isdigit():
             getal += char*n
         elif getal:
-            bins[int(getal)//1000] += 1
+            if len(getal) < 5:
+                bins[int(getal)//1000] += 1
             getal = ""
         if char in "\\01234567890":
             out += "\\"
@@ -61,6 +62,16 @@ def encode(text):
     if getal:
         bins[int(getal)//1000] += 1
     return out, bins
+
+
+def palindroom(accu):
+    print(accu)
+    string = str(accu)
+    reductions = 0
+    while string != string[::-1]:
+        reductions += 1
+        string = string[:-1]
+    return accu, reductions
 
 
 def histogram(bins):
@@ -84,6 +95,7 @@ def decode(code):
     accustring = ""
     accu = 0
     while i <= len(code):
+        print(accu)
         if i < len(code):
             char = code[i]
         else:
@@ -94,18 +106,36 @@ def decode(code):
         elif not escape and char == "\\":
             isescape = True
         elif not escape and char == ":":
-            cmdchar = code[i+1]
-            if cmdchar == "R":
-                accu = 0
-                prevletter = char
+            if code[i+1] in "PR":
+                n = int(digits or "1")
+                digits = ""
+                i+=1
+                out+=n*prevletter
+                print(out)     #HIER GEBLEVEN VOOR VOLGENDE MAAL
+                if prevletter.isdigit():
+                    accustring+=prevletter*n
+                accu += int(accustring or "0")
                 accustring = ""
-                i += 1
-            elif char == "P":
-                out += str(palindroom(accu)).replace(" ","")
-                i += 1
+                print("accu",accu)
+                prevletter =""
+                #out += n*prevletter
+                if code[i] == "R":
+                    accu = 0
+                    accustring = ""
+                else:
+                    out += str(palindroom(accu)).replace(" ", "")
+                    print(out)     #HIER GEBLEVEN VOOR VOLGENDE MAAL
             else:
-                isescape = True
-                i -= 1
+                n = int(digits or "1")
+                digits = ""
+                escape = False
+                if prevletter.isdigit():
+                    accustring += prevletter*n
+                else:
+                    accu += int(accustring or "0")
+                    accustring = ""
+                out += n*prevletter
+                prevletter = char
         else:
             n = int(digits or "1")
             digits = ""
