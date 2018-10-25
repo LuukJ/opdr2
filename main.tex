@@ -34,7 +34,7 @@
         \end{lstlisting}
 
        
-       De volgende conditie kijkt of het huidige karakter hetzelfde is als de vorige karakter en op basis hiervan word er bepaald of het bij de accumulator "n" moet worden opgeteld. Is het karakter niet hetzelfde als het vorige karakter dan wordt het getal van de accumulator samen met het vorige karakter afgedrukt en begint de accumulator opnieuw.
+       De volgende conditie kijkt of het huidige karakter hetzelfde is als de vorige karakter en op basis hiervan word er bepaald of het bij de teller "n" moet worden opgeteld. Is het karakter niet hetzelfde als het vorige karakter dan wordt het getal van de teller samen met het vorige karakter afgedrukt en begint de teller opnieuw.
        \newline
        
        Op het laatste word er gekeken naar een speciale encode voorwaarde waarbij een aantal karakters op een speciale manier gedecodeerd moeten worden. Hierbij gaat het over de charakters "\\01234567890:". Deze karakters moeten gedecodeerd worden met een "\\" voor zich. Het doel hiervan is het herkennen van deze speciale getallen tijdens het decoderen en het voorkomen van ongewenste artifacten. Hierbij zou bijvoorbeeld een "/n" gezien kunnen worden door python als een line-break i.p.v een normaal stukje text. Deze manier van encoderen zorgt ervoor dat dit niet gebeurd.
@@ -52,11 +52,49 @@
         \end{lstlisting}
        
     \subsection{Decoderen}
+    De ontwikkeling van het decoderen is opgebouwd uit verschillende delen. Het Decompressiegedeelte, de escapevoorwaarde en de palindroombepaling. 
     
+     \subsubsection{Decompressie}
+    Het compressiegedeelte werkt op basis van getallen die de repetitie van het vorige getal bepalen. Zo word er in de code de text karakter voor karakter uitgelezen waarbij bij elke iteratie ook het vorige karakter onthouden word. Wanneer de code een getal tegenkomt na een karakter voert het dit vorige getal keer het gelezen karakter uit naar het uitvoerbestand. 
+    
+    \subsubsection{Palindroom}
+    De palindroombepaling werkt door het getal waar de palindroombepaling op uitgevoerd moet worden op te slaan in een accumulator. Wanneer het programma het keyword ":P" tegenkomt word de functie palindroom(accu) aangeroepen met de huidige accumulator als parameter. Deze accumulator word voor elke iteratie van de functie vergeleken met zijn eigen inverse. Wanneer het bij een iteratie niet resulteerd in een palindroom word het laatste getal van de accumulator afgehaald en word de palindroom-check nog een keer gedaan. Dit word herhaald tot de functie een palindroom tegenkomt of tot het geen letters in de accumulator meer overhoud.
+    \begin{lstlisting}[frame=single, language=python]
+    def palindroom(accu):
+    """ retourneert (accu, reductions)
+    
+      accu - de accumulator van het decoderen
+    
+    Verwijdert het laatste cijfer tot het getal een palindroomgetal is
+    en houdt daarbij in `reductions` bij hoevaak dit gebeurt.
+        """
+        string = str(accu)
+        reductions = 0
+        while string != string[::-1]:
+            reductions += 1
+            string = string[:-1]
+    return accu, reductions
+    
+    \end{lstlisting}
         
+    \subsubsection{Escapevoorwaarde}
+    De escapevoorwaarde in onze Decodeercode heeft de functie om bepaalde stukken van de functie over te slaan wanneer de situatie bepaald is. Zo word de rest van de funcite niet uitgevoerd wanneer er een // word gededecteerd en wanneer er een palindroom of accumulator reset uitgevoerd moet worden. Dit zorgt ervoor dat er geen onnodige code uitgevoerd moet worden en het programma zo efficient loopt. Deze escape voorwaarde zorgt ervoor dat wanneer deze word gededecteerd, het het volgende karakter letterlijk moet opvatten en hier geen speciale operatie op moet toepassen. Op deze manier word het in de code ook mogelijk om backslashes te coderen.
     
     \subsection{Histogram}
-      De ontwikkeling van het histogram ging relatief rechtoe rechtaan aangezien we beide een duidelijk beeld hadden van de aanpak. Het eerste prototype was schetsend en zeer tijdrovend. Hoewel dit "schetsje" zeer overzichtelijk was was het ook heel onnodig groot gecodeerd. Dat was voor ons de reden om een compactere versie van het histogram te maken. De schets maakte gebruik van een systeem waarbij het historgram al vooraf ruimtelijk was getekend en geinitaliseerd moest worden met standaardwaarden. Na deze initiatie werden de correcte coordinaten in het histogram vervangen door sterretjes. 
+      De ontwikkeling van het histogram ging relatief rechtoe rechtaan aangezien we beide een duidelijk beeld hadden van de aanpak. Het eerste prototype was schetsend en zeer tijdrovend. Hoewel dit "schetsje" zeer overzichtelijk was was het ook heel onnodig groot gecodeerd. Dat was voor ons de reden om een compactere versie van het histogram te maken. De schets maakte gebruik van een systeem waarbij het historgram al vooraf ruimtelijk was getekend en geinitaliseerd moest worden met standaard variabelen. Na deze initiatie werden de correcte coordinaten(variabelen) in het histogram vervangen door sterretjes. 
+      \begin{lstlisting}[frame=single, language=python] 
+    def histogram(bins):
+    
+        rows = [["*" if bins[x]/max(bins)*10 > (y+0) else " " for x in range(10)]
+                for y in range(10)]
+        out = str(max(bins))
+        for row in reversed(rows):
+            out += "\n |" + " ".join(row)
+        out += "\n +" + "-"*20
+        out += "\n1" + " "*20 + "9999"
+    return out
+      \end{lstlisting}
+      
       \newpage
       \begin{lstlisting}[frame=single, language=python]  % Start your code-block
             
@@ -81,14 +119,13 @@
                 1                    9999
         \end{lstlisting}
       
-      De uiteindelijke gecomprimeerde versie van de histogramfunctie maakt gebruik van een for-loop waarbij het tekenen en initialisatie van het programma in een loop verwerkt zitten. Dit stukje bespaart ons ongeveer 37 regels in het uiteindelijke product en is veel efficienter voor het werkgeheugen omdat het hierbij geen onnodige varabelen op moet slaan. 
+      De uiteindelijke gecomprimeerde versie van de histogramfunctie maakt gebruik van een for-loop waarbij het tekenen en initialisatie van het programma in een loop verwerkt zitten. Dit stukje bespaart ons ongeveer 40 regels in het uiteindelijke product en is veel efficienter voor het werkgeheugen omdat het hierbij geen onnodige varabelen op moet slaan. 
     
-    \subsection{Palindrome}
-         Palindroombepaling
+
     
     \subsection{Verhouding}
         De verhouding word in ons programma berekend door eerst het invoerbestand lijn voor lijn om te zetten naar het UTF-8 formaat zodat wij zeker weten dat elk karakter dezelfde ruimte van 8 bits inneemt. Hierdoor neemt elk karakter dezelfde ruimte in waardoor het makkelijk is om mee te rekenen. Hierbij word er ook rekening gehouden met veel speciale karakters in unicode die bestaan uit meer dan 1 byte. De verhouding word gerekend door de  naar UTF-8 omgezette lijn voor het encoderen te delen door de naar UTF-8 omgezette lijn na het encoderen. Dit resulteerd in het compressieratio van de gecomprimeerde textfile. 
-        
+        \newpage
         \begin{lstlisting}[frame=single, language=python]  % Start your code-block
         input():
             "Who knew little charlie could run that fast. He kept on running faster fasteer and fasteeeeeerr !"
@@ -114,8 +151,307 @@
   Week 1 & Encodeer gedeelte van de functie uitdenken en uitwereken en debuggen & Encodeergedeelte van de functie uitdenken en debuggen \\
   Week 2 & Een begin maken aan Decodeerfunctie en ideen opdoen voor palindroomuitwerking & Ontwerpen en uitwerken van eerste Histogramcode prototype \\
   Week 3 & -Ideeen opdoen voor verdere decodeeroptimalisatie en aanpassingen maken aan de decodeerfunctie om de code zo efficient en klein mogelijk te maken.\linebreak -Integratie van palindroomfunctie in de decodeerfunctie & -Verdere uitwerk van Histogramcode en gezamelijke Decoderen Debugging. \linebreak - Ontwikkeling uiteindelijk geimplementeerde versie van het histogram.  \linebreak  - Onderzoek naar python classes \\
-  Week 4  & Debuggen van speciale gevallen bij het en- en decoderen. Implementeren van het compressieratio & Debugging \\
+  Week 4  & Debuggen van speciale gevallen bij het en- en decoderen. Implementeren van het compressieratio & Debugging an problemen die optraden tijdens het runnen van testbestanden \\
+ 
+ 
  
   
 \end{tabular}
+
+\section{De gehele code}
+ 
+ \begin{lstlisting}[frame=single, language=python]
+ #!/usr/bin/env python3
+"""opdracht 2 - DeCode
+Auteurs: Levi van Es  - 2115409
+         Luuk de Jong - 2260018
+Datum van laatste bewerking: 2018-10-25
+
+Het programma kan tekst volgens het principe van
+"Run-Length Encoding" coderen en decoderen en detecteert
+daarbij getallen.
+"""
+import sys
+
+INFOBLOKJE = \
+"""
+
+|Auteurs:                                                           |
+| Naam: Levi van Es                                                |
+|  Studentnummer: 2115409                                           |
+|  Jaar van aankomst: 2018                                          |
+|  Studierichting: Natuurkunde                                      |
+|                                                                   |
++ Naam: Luuk de Jong                                               |
+|  Studentnummer: 2260018                                           |
+|  Jaar van aankomst: 2018                                          |
+|  Studierichting: Natuurkunde                                      |
+
+|Opgave: DeCode                                                     |
+
+|Inleverdatum: 2018-10-26                                           |
+
+|Instructie voor gebruiker:                                         |
+|    Er wordt gevraagd of er gecodeerd of gedecodeerd moet worden,  |
+|    er wordt een invoerbestand en een uitvoerbestand gevraagd en   |
+|    vervolgens wordt de inhoud van het invoerbestand gecodeerd     |
+|    of gedecodeerd en weggeschreven naar het uitvoerbestand.       |
+
+"""
+
+
+def encode(text):
+    """Codeert tekst volgens Run-Length Encoding
+
+    text - de te coderen tekst
+
+    Tijdens het coderen worden getallen bijgehouden.
+    Hoevaak deze getallen in bereiken [0,999], ..., [9000,9999]
+    voorkomen wordt bijgehouden in de lijst `bins` teneinde het maken
+    van een histogram.
+
+    Retourneert de gecodeerde tekst en de bins voor het histogram.
+    """
+    out = ""
+    i = 0
+    getal = ""
+    bins = [0]*10
+    while i < len(text):
+        n = 0
+        char = text[i]
+        while i < len(text) and text[i] == char:
+            n += 1
+            i += 1
+        if char.isdigit():
+            getal += char*n
+        elif getal:
+            if len(getal) < 5:
+                bins[int(getal)//1000] += 1
+            getal = ""
+        if char in "\\01234567890":
+            out += "\\"
+        out += char
+        if n > 1:
+            out += str(n)
+    if getal:
+        bins[int(getal)//1000] += 1
+    return out, bins
+
+
+def palindroom(accu):
+    """ retourneert (accu, reductions)
+
+    accu - de accumulator van het decoderen
+
+    Verwijdert het laatste cijfer tot het getal een palindroomgetal is
+    en houdt daarbij in `reductions` bij hoevaak dit gebeurt.
+    """
+    string = str(accu)
+    reductions = 0
+    while string != string[::-1]:
+        reductions += 1
+        string = string[:-1]
+    return accu, reductions
+
+
+def histogram(bins):
+    """Retourneert een histogram
+
+    bins - een lijst van lengte 10 met daarin de frequenties van getallen
+           binnen bereiken [0,999], [1000,1999], ..., [9000,9999].
+ 
+    In de opdracht stond [1,999] i.p.v [0,999] maar [0,999] past beter
+    bij de rest en op Blackboard staat dat 0 meetellen ook goed is.
+    """
+    rows = [["*" if bins[x]/max(bins)*10 > (y+0) else " " for x in range(10)]
+            for y in range(10)]
+    out = str(max(bins))
+    for row in reversed(rows):
+        out += "\n |" + " ".join(row)
+    out += "\n +" + "-"*20
+    out += "\n1" + " "*20 + "9999"
+    return out
+
+
+def decode(code):
+    """ Decodeert de door `encode` gecodeerde tekst
+
+    code - de gecodeerde tekst
+
+    Tijdens het decoderen wordt op een aantal dingen gelet.
+    Getallen die worden weggeschreven worden gedetecteerd en opgeteld
+    bij een accumulator.
+    Daarnaast wordt gelet op twee controlesequenties: ':R' en ':P'.
+    ':R' reset de accumulator naar 0.
+    ':P' voert een palindroombepaling uit (zie de functie `palindroom`)
+    """
+    i = 0  # positie in tekst
+    escape = False  # Het volgende karakter letterlijk opvatten door backslash.
+    digits = ""  # string voor bijhouden gedetecteerde getallen.
+    n = 0  # Hoe vaak het karakter weg te schrijven is.
+    prevletter = ""  # Het te onthouden karakter.
+    out = ""  # De uiteindelijke uitvoer.
+    accustring = ""  # String voor tijdelijke opslag getallen voor accumulator.
+    accu = 0  # Accumulator
+    while i <= len(code):
+        if i < len(code):
+            char = code[i]
+        else:
+            char = ""
+        isescape = False
+        if not escape and char.isdigit():
+            digits += char
+        elif not escape and char == "\\":
+            isescape = True
+        elif not escape and char == ":" and code[i+1] in "PR":
+            n = int(digits or "1")
+            digits = ""
+            i += 1
+            out += n*prevletter
+            if prevletter.isdigit():
+                accustring += prevletter*n
+            accu += int(accustring or "0")
+            accustring = ""
+            prevletter = ""
+            if code[i] == "R":
+                accu = 0
+                accustring = ""
+            else:
+                out += str(palindroom(accu)).replace(" ", "")
+        else:
+            n = int(digits or "1")
+            digits = ""
+            escape = False
+            if prevletter.isdigit():
+                accustring += prevletter*n
+            else:
+                accu += int(accustring or "0")
+                accustring = ""
+            out += n*prevletter
+            prevletter = char
+        escape = isescape
+        i += 1
+    if prevletter.isdigit():
+        accustring += prevletter*n
+    else:
+        accu += int(accustring or "0")
+        accustring = ""
+    out += prevletter
+    return out
+
+
+def main():
+    """Hoofdfunctie
+
+    Toont de gebruiker het informatieblokje, vraagt om decoderen of coderen,
+    een invoerbestand en een uitvoerbestand.
+    Voert vervolgens de gekozen operatie uit op het invoerbestand en
+    schrijft het weg naar het uitvoerbestand.
+    Toont bij coderen de compressieverhouding en het aantal verwerkte regels
+    en toont bij decoderen het histogram als dit zinvol is.
+    """
+    print(INFOBLOKJE)
+    modus = "x"
+    while modus not in "01":
+        modus = input("Selecteer een operatie:\n[0] coderen\n[1] decoderen\n> ")
+    f_in = None
+    while not f_in:
+        infile = input("Welk bestand lezen?\n> ")
+        try:
+            f_in = open(infile)
+        except IOError:
+            print(infile, "niet gevonden.")
+    outfile = input("Opslaan als?\n> ")
+    f_out = open(outfile, "w")
+    if modus == "0":
+        histogram_bins = [0 for _ in range(10)]
+        outsize = 0
+        insize = 0
+        lines = 0
+        for line in f_in:
+            lines += 1
+            # Veel unicode-karakters die buiten ASCII vallen zijn groter
+            # dan 1 Byte
+            insize += len(line.encode("utf8"))
+            gecodeerd, bins = encode(line)
+            outsize += len(gecodeerd.encode("utf8"))
+            f_out.write(gecodeerd)
+            for i in range(10):
+                histogram_bins[i] += bins[i]
+        print("Compressierate: {}%".format(outsize*100//insize))
+        print("Regels verwerkt: {}".format(lines))
+        if any(histogram_bins):
+            print(histogram(histogram_bins))
+    else:  # Het is al zeker dat modus ofwel 1 ofwerl 0 is.
+        out = decode(f_in.read())
+        f_out.write(out)
+    f_out.close()
+    f_in.close()
+    return 0
+
+if __name__ == "__main__":
+    sys.exit(main())
+
+ \end{lstlisting}
+
+\subsection{Histogram prototype}
+\begin{lstlisting}[frame=single, language=python]
+
+x = [34, 54, 11, 22, 42, 20, 79, 55, 65, 57]
+
+### schaalt de array naar een getal tussen 0 en 10
+def scalar(array):
+    p = max(array)/10
+    x_augmented = []
+    for value in array:
+        scaledelement= ((value / p)+0.5)
+        x_augmented.append(scaledelement)
+    return(x_augmented)
+
+## definieerd welke varabelen in de grafiek een sterretje moeten bevatten
+def graphdefine(t):
+    col= ["A","B","C","D","E","F","G", "H", "I", "J"]
+    for value in t:
+        counter = 0
+        while counter <= value:
+            p = col[t.index(value)] + str(counter)
+
+            exec("global "+ p +"; " + p + " = '*'")
+            counter += 1
+
+## definieerd alle variablen van de grafiek naar een spatie zodat er geen errors voorkomen
+def set_init_var():
+    col = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
+    for element in col:
+         counter=1
+         while counter <= 10:
+             g = col[col.index(element)] + str(counter)
+             exec("global " + g + "; " + g + " = ' '")
+             counter += 1
+
+set_init_var()
+
+
+if x != [0,0,0,0,0,0,0,0,0,0,]:
+
+    graphdefine(scalar(x))
+
+    print( max(x), "\n"
+    "|", A10 ,B10 , C10, D10, E10, F10, G10, H10, I10, J10, "\n"
+    "|", A9 ,B9, C9, D9, E9, F9, G9, H9, I9, J9, "\n"
+    "|", A8 ,B8, C8, D8, E8, F8, G8, H8, I8, J8, "\n"
+    "|", A7 ,B7, C7, D7, E7, F7, G7, H7, I7, J7, "\n"
+    "|", A6 ,B6, C6, D6, E6, F6, G6, H6, I6, J6, "\n"
+    "|", A5 ,B5, C5, D5, E5, F5, G5, H5, I5, J5, "\n"
+    "|", A4 ,B4, C4, D4, E4, F4, G4, H4, I4, J4, "\n"
+    "|", A3 ,B3, C3, D3, E3, F3, G3, H3, I3, J3, "\n"
+    "|", A2 ,B2, C2, D2, E2, F2, G2, H2, I2, J2, "\n"
+    "|", A1 ,B1, C1, D1, E1, F1, G1, H1, I1, J1, "\n"
+    "+--------------------", "9999" , "\n"
+    "1")
+
+
+\end{lstlisting}
+
+
 \end{document}
