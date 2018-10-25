@@ -65,7 +65,7 @@ def encode(text):
             if len(getal) < 5:
                 bins[int(getal)//1000] += 1
             getal = ""
-        if char in "\\01234567890":
+        if char in "\\0123456789":
             out += "\\"
         out += char
         if n > 1:
