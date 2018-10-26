@@ -90,10 +90,22 @@
     De ontwikkeling van het decoderen is opgebouwd uit verschillende delen. Het Decompressiegedeelte, de escapevoorwaarde en de palindroombepaling. 
     
      \subsubsection{Decompressie}
-    Het compressiegedeelte werkt op basis van getallen die de repetitie van het vorige getal bepalen. Zo word er in de code de text karakter voor karakter uitgelezen waarbij bij elke iteratie ook het vorige karakter onthouden word. Wanneer de code een getal tegenkomt na een karakter voert het dit vorige getal keer het gelezen karakter uit naar het uitvoerbestand. 
+    Het compressiegedeelte werkt op basis van getallen die de repetitie van
+		het vorige getal bepalen. Zo word er in de code de text karakter voor
+		karakter uitgelezen waarbij bij elke iteratie ook het vorige karakter
+		onthouden word. Wanneer de code een getal tegenkomt na een karakter voert
+		het dit vorige getal keer het gelezen karakter uit naar het uitvoerbestand. 
     
     \subsubsection{Palindroom}
-    De palindroombepaling werkt door het getal waar de palindroombepaling op uitgevoerd moet worden op te slaan in een accumulator. Wanneer het programma het keyword ":P" tegenkomt word de functie palindroom(accu) aangeroepen met de huidige accumulator als parameter. Deze accumulator word voor elke iteratie van de functie vergeleken met zijn eigen inverse. Wanneer het bij een iteratie niet resulteerd in een palindroom word het laatste getal van de accumulator afgehaald en word de palindroom-check nog een keer gedaan. Dit word herhaald tot de functie een palindroom tegenkomt of tot het geen letters in de accumulator meer overhoud.
+    De palindroombepaling werkt door het getal waar de palindroombepaling op
+		uitgevoerd moet worden op te slaan in een accumulator.
+		Wanneer het programma het keyword ``:P'' tegenkomt word de functie
+		palindroom(accu) aangeroepen met de huidige accumulator als parameter.
+		Deze accumulator word voor elke iteratie van de functie vergeleken met
+		zijn eigen inverse. Wanneer het bij een iteratie niet resulteerd in een
+		palindroom word het laatste getal van de accumulator afgehaald en word
+		de palindroom-check nog een keer gedaan. Dit word herhaald tot de functie
+		een palindroom tegenkomt.
     \begin{lstlisting}[frame=single, language=python]
     def palindroom(accu):
     """ retourneert (accu, reductions)
