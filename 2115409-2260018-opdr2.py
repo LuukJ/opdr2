@@ -135,11 +135,10 @@ def decode(code):
             char = code[i]
         else:
             char = ""
-        isescape = False
         if not escape and char.isdigit():
             digits += char
         elif not escape and char == "\\":
-            isescape = True
+            escape = True
         elif not escape and char == ":" and code[i+1] in "PR":
             n = int(digits or "1")
             digits = ""
@@ -166,7 +165,6 @@ def decode(code):
                 accustring = ""
             out += n*prevletter
             prevletter = char
-        escape = isescape
         i += 1
     if prevletter.isdigit():
         accustring += prevletter*n
