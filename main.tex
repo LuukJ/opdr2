@@ -34,7 +34,16 @@
 \section{Code}
 
     \subsection{Encoderen}
-       De encodeerfunctie itereert over elk character in "Text". Hierbij gaat het bij elke iteratie over de controle van een aantal condities. De eerste conditie word gecheckt door een if statement waarbij het huidige charakter word gecheckt of het een getal is.Wanneer deze een boolean van true teruggeeft wordt dit getal opgeteld bij de variable "getal". Wanneer het complete getal is opgesteld word het door de "bins" (numpy functie) functie omgezet naar een getal binnen een bepaald bereik waardoor het later makkelijk is om in de histogram te verwerken.
+       De encodeerfunctie itereert over elk character in "Text".
+			 Hierbij gaat het bij elke iteratie over de controle van een
+			 aantal condities.
+			 De eerste conditie word gecheckt door een if statement waarbij
+			 het huidige charakter word gecheckt of het een getal is.
+			 Wanneer dit zo is wordt dit getal
+			 opgeteld bij de string "getal".
+			 Wanneer het complete getal is opgesteld wordt er 1 opgeteld bij
+			 de juiste waarde in een lijst met hoevaak getallen in bepaalde bereiken
+			 voorkomen, op hier later een histogram van te maken.
        
        
        \begin{lstlisting}[frame=single, language=python]  % Start your code-block
