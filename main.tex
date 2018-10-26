@@ -148,7 +148,7 @@
       \begin{lstlisting}[frame=single, language=python] 
     def histogram(bins):
     
-        rows = [["*" if bins[x]/max(bins)*10 > (y+0) else " " for x in range(10)]
+        rows = [["*" if bins[x]/max(bins)*10 > y else " " for x in range(10)]
                 for y in range(10)]
         out = str(max(bins))
         for row in reversed(rows):
@@ -182,7 +182,13 @@
                 1                    9999
         \end{lstlisting}
       
-      De uiteindelijke gecomprimeerde versie van de histogramfunctie maakt gebruik van een for-loop waarbij het tekenen en initialisatie van het programma in een loop verwerkt zitten. Dit stukje bespaart ons ongeveer 40 regels in het uiteindelijke product en is veel efficienter voor het werkgeheugen omdat het hierbij geen onnodige varabelen op moet slaan. 
+      De uiteindelijke gecomprimeerde versie van de histogramfunctie maakt
+			gebruikt van list comprehension, waarbij een tweedimensionale lijst
+			als omgekeerd histogram wordt gemaakt. Vervolgens wordt deze omgekeerd
+			gelezen en omgezet in een mooi histogram als string.
+			Dit stukje bespaart ons ongeveer 40 regels in het uiteindelijke product
+			en is veel effici\"enter voor het werkgeheugen omdat het hierbij geen
+			onnodige varabelen op moet slaan. 
     
 
     
