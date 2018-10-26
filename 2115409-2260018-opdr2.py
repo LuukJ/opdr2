@@ -205,11 +205,9 @@ def main():
         lines = 0
         for line in f_in:
             lines += 1
-            # Veel unicode-karakters die buiten ASCII vallen zijn groter
-            # dan 1 Byte
-            insize += len(line.encode("utf8"))
+            insize += len(line)
             gecodeerd, bins = encode(line)
-            outsize += len(gecodeerd.encode("utf8"))
+            outsize += len(gecodeerd)
             f_out.write(gecodeerd)
             for i in range(10):
                 histogram_bins[i] += bins[i]
