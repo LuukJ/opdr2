@@ -193,7 +193,12 @@
 
     
     \subsection{Verhouding}
-        De verhouding word in ons programma berekend door eerst het invoerbestand lijn voor lijn om te zetten naar het UTF-8 formaat zodat wij zeker weten dat elk karakter dezelfde ruimte van 8 bits inneemt. Hierdoor neemt elk karakter dezelfde ruimte in waardoor het makkelijk is om mee te rekenen. Hierbij word er ook rekening gehouden met veel speciale karakters in unicode die bestaan uit meer dan 1 byte. De verhouding word gerekend door de  naar UTF-8 omgezette lijn voor het encoderen te delen door de naar UTF-8 omgezette lijn na het encoderen. Dit resulteerd in het compressieratio van de gecomprimeerde textfile. 
+		    Voor het berekenen van de compressieverhouding wordt het 
+				aantal karakters van voor en na het coderen vergeleken.
+				Eerst hadden we bedacht het aantal bytes te vergelijken, gezien
+				dit voor Unicode-karakters buiten ASCII kan verschillen, maar in de
+				opdracht staat expliciet dat het aantal karakters vergeleken moet
+				worden.
         \newpage
         \begin{lstlisting}[frame=single, language=python]  % Start your code-block
         input():
