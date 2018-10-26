@@ -33,8 +33,8 @@
 
 \section{Code}
 
-    \subsection{Encoderen}
-       De encodeerfunctie itereert over elk character in "Text".
+    \subsection{Coderen}
+       De codeerfunctie itereert over elk character in "Text".
 			 Hierbij gaat het bij elke iteratie over de controle van een
 			 aantal condities.
 			 De eerste conditie word gecheckt door een if statement waarbij
@@ -63,7 +63,16 @@
        De volgende conditie kijkt of het huidige karakter hetzelfde is als de vorige karakter en op basis hiervan word er bepaald of het bij de teller "n" moet worden opgeteld. Is het karakter niet hetzelfde als het vorige karakter dan wordt het getal van de teller samen met het vorige karakter afgedrukt en begint de teller opnieuw.
        \newline
        
-       Op het laatste word er gekeken naar een speciale encode voorwaarde waarbij een aantal karakters op een speciale manier gedecodeerd moeten worden. Hierbij gaat het over de charakters "\\01234567890:". Deze karakters moeten gedecodeerd worden met een "\\" voor zich. Het doel hiervan is het herkennen van deze speciale getallen tijdens het decoderen en het voorkomen van ongewenste artifacten. Hierbij zou bijvoorbeeld een "/n" gezien kunnen worden door python als een line-break i.p.v een normaal stukje text. Deze manier van encoderen zorgt ervoor dat dit niet gebeurd.
+       Op het laatste word er gekeken naar een speciale encode voorwaarde
+			 waarbij een aantal karakters op een speciale manier gedecodeerd moeten worden.
+			 Hierbij gaat het over de charakters \texttt{"\textbackslash0123456789"}.
+			 Deze karakters moeten gedecodeerd worden met een "\textbackslash" voor zich.
+			 Het doel hiervan is het herkennen van deze speciale getallen tijdens het
+			 decoderen en het voorkomen van ongewenste artifacten.
+			 Hierbij zou bijvoorbeeld een \texttt{"\textbackslash n"}
+			 gezien kunnen worden door python als
+			 een line-break i.p.v een normaal stukje text. Deze manier van encoderen
+			 zorgt ervoor dat dit niet gebeurd.
        
        
        \begin{lstlisting}[frame=single, language=python]  % Start your code-block
