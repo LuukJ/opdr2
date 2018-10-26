@@ -100,7 +100,7 @@ def histogram(bins):
     In de opdracht stond [1,999] i.p.v [0,999] maar [0,999] past beter
     bij de rest en op Blackboard staat dat 0 meetellen ook goed is.
     """
-    rows = [["*" if bins[x]/max(bins)*10 > (y+0) else " " for x in range(10)]
+    rows = [["*" if bins[x]/max(bins)*10 > y else " " for x in range(10)]
             for y in range(10)]
     out = str(max(bins))
     for row in reversed(rows):
