@@ -125,7 +125,14 @@
     \end{lstlisting}
         
     \subsubsection{Escapevoorwaarde}
-    De escapevoorwaarde in onze Decodeercode heeft de functie om bepaalde stukken van de functie over te slaan wanneer de situatie bepaald is. Zo word de rest van de funcite niet uitgevoerd wanneer er een // word gededecteerd en wanneer er een palindroom of accumulator reset uitgevoerd moet worden. Dit zorgt ervoor dat er geen onnodige code uitgevoerd moet worden en het programma zo efficient loopt. Deze escape voorwaarde zorgt ervoor dat wanneer deze word gededecteerd, het het volgende karakter letterlijk moet opvatten en hier geen speciale operatie op moet toepassen. Op deze manier word het in de code ook mogelijk om backslashes te coderen.
+    De escapevoorwaarde in onze Decodeercode heeft de functie om bepaalde
+		stukken van de functie over te slaan wanneer de situatie bepaald is.
+		Zo word de rest van de functie niet uitgevoerd wanneer er een ``\textbackslash'' wordt
+		gedetecteerd en wanneer er een palindroom of accumulator reset uitgevoerd moet worden.
+		Deze escape voorwaarde zorgt ervoor dat wanneer deze word gededecteerd,
+		het het volgende karakter letterlijk moet opvatten en hier geen speciale
+		operatie op moet toepassen.
+		Op deze manier word het in de code ook mogelijk om backslashes te coderen.
     
     \subsection{Histogram}
       De ontwikkeling van het histogram ging relatief rechtoe rechtaan aangezien we beide een duidelijk beeld hadden van de aanpak. Het eerste prototype was schetsend en zeer tijdrovend. Hoewel dit "schetsje" zeer overzichtelijk was was het ook heel onnodig groot gecodeerd. Dat was voor ons de reden om een compactere versie van het histogram te maken. De schets maakte gebruik van een systeem waarbij het historgram al vooraf ruimtelijk was getekend en geinitaliseerd moest worden met standaard variabelen. Na deze initiatie werden de correcte coordinaten(variabelen) in het histogram vervangen door sterretjes. 
